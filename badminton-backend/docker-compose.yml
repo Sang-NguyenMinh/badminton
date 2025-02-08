@@ -1,0 +1,23 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+     - PORT=8080
+     - MONGODB_URI=mongodb://localhost:27017/sport-book-app
+     - JWT_SECRET=c76bb4c8-0a35-4b51-8224-a5e954ba856e
+     - JWT_ACCESS_TOKEN_EXPIRED=10d
+     - MAIL_USER=msang.nms@gmail.com
+     - MAIL_PASSWORD=ccft fkna kbby oilu
+     - GOOGLE_CLIENT_ID= 1010487965133-v6j2t805nvt256nlgpmelffthr06luth.apps.googleusercontent.com
+     - GOOGLE_CLIENT_SECRET= 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
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+
