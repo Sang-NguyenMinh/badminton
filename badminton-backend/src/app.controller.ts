@@ -8,8 +8,14 @@ import { AuthGuard } from '@nestjs/passport';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  // @Public()
+  // @Get()
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuth(@Req() req) {}
+
   @Public()
   @Get()
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  get(){
+    return 'Hello world'
+  }
 }

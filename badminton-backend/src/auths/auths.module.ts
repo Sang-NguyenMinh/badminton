@@ -4,16 +4,15 @@ import { AuthService } from './auths.service';
 import { UsersModule } from 'src/core/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { BcryptModule } from 'src/helper/bcrypt.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { GoogleStrategy } from './passport/google.strategy';
+import { BcryptService } from 'src/shared/bcrypt.service';
 
 @Module({
   imports: [
     UsersModule,
-    BcryptModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         global: true,
@@ -27,7 +26,7 @@ import { GoogleStrategy } from './passport/google.strategy';
     PassportModule,
   ],
   controllers: [AuthsController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
+  providers: [AuthService,BcryptService, LocalStrategy, JwtStrategy, GoogleStrategy],
   exports: [AuthService],
 })
 export class AuthsModule {}

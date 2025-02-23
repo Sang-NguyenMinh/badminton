@@ -28,10 +28,8 @@ import { ConversationsModule } from './core/conversations/conversations.module';
 import { PaymentModule } from './core/payment/payment.module';
 import { PaymentService } from './core/payment/payment.service';
 import { PaymentController } from './core/payment/payment.controller';
-import { ChatGateway } from 'src/chat/chat.gateway';
 import { ChatModule } from './chat/chat.module';
 import { NotificationModule } from './notification/notification.module';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -64,7 +62,6 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     ConversationsModule,
     PaymentModule,
     ChatModule,
-    CloudinaryModule,
     ConfigModule.forRoot({ isGlobal: true }),
 
     MongooseModule.forRootAsync({
@@ -102,7 +99,6 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     }),
     ChatModule,
     NotificationModule,
-    CloudinaryModule,
   ],
   controllers: [AppController, PaymentController],
   providers: [

@@ -7,7 +7,7 @@ import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import mongoose, { Model } from 'mongoose';
-import { BcryptService } from 'src/helper/bcrypt.service';
+import { BcryptService } from 'src/shared/bcrypt.service';
 import aqp from 'api-query-params';
 import dayjs from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';

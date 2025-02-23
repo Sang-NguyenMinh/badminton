@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/core/users/users.service';
-import { BcryptService } from 'src/helper/bcrypt.service';
+import { BcryptService } from 'src/shared/bcrypt.service';
 import {
   ChangePasswordAuthDto,
   CodeAuthDto,

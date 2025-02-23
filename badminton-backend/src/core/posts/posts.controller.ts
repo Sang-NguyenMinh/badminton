@@ -14,7 +14,7 @@ import { PostsService } from './posts.service';
 import { CreatePostDto, UpdatePostDto } from './dto/posts.dto';
 import { CurrentUser, Public } from 'src/decorators/customize';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/shared/cloudinary.service';
 import { POST_STATUS } from 'src/config/type';
 
 @Controller('posts')

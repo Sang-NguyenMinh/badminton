@@ -3,7 +3,7 @@ import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './schemas/post.schema';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/shared/cloudinary.service';
 import { User, UserSchema } from '../users/schemas/user.schema';
 import { Group, GroupSchema } from '../groups/schemas/group.schema';
 

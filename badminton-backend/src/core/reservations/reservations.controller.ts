@@ -28,7 +28,6 @@ export class ReservationsController {
   @Get()
   async findAll(
     @CurrentUser() user: any,
-
     @Query('query') query: string = '',
     @Query('current') current: number = 1,
     @Query('pageSize') pageSize: number = 10,
@@ -36,8 +35,6 @@ export class ReservationsController {
     @Query('status') status: string = '',
     
   ) {
-
-    
     return this.reservationsService.findAll(query, current, pageSize,keyword,user._id,status);
   }
 

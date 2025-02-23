@@ -16,7 +16,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import {
   ChangePasswordAuthDto,
   CodeAuthDto,
-  CreateAuthDto,
 } from './dto/create-auth.dto';
 import { UsersService } from 'src/core/users/users.service';
 import { CreateUserDto } from 'src/core/users/dto/user.dto';
