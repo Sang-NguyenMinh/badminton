@@ -15,15 +15,6 @@ import { Avatar, Badge } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { useAppSelector } from "@/core/redux/hooks";
 import { SocialMediaAPIs } from "@/core/apis/socialMediaAPIs";
-interface Post {
-  id: string;
-  author: string;
-  avatar: string;
-  content: string;
-  image?: string;
-  likes: number;
-  comments: number;
-}
 
 interface Friend {
   id: string;

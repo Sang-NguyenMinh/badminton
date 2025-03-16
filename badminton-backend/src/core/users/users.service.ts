@@ -205,7 +205,7 @@ export class UsersService {
           isActive: true,
         },
       );
-      return { isBeforeCheck };
+      return { active: isBeforeCheck };
     } else {
       throw new BadRequestException('Mã code không hợp lệ hoặc đã hết hạn');
     }

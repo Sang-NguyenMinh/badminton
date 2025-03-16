@@ -17,7 +17,7 @@ import MapView, {
   Polyline,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import * as Location from "expo-location";
@@ -34,24 +34,14 @@ import {
   Title,
 } from "react-native-paper";
 import * as Notifications from "expo-notifications";
+import { BadmintonCourt } from "@/configs/type";
+import { decodePolyline } from "@/core/libs/utils";
 interface Suggestion {
   place_id: string;
   description: string;
 }
 
-interface BadmintonCourt {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-  address: string;
-  openingHours: string;
-  phoneNumber: string;
-  rating: number;
-}
-
 const API_KEY = "AlzaSy-J6MHAqBkEymqbjrMuMQvCvGNRAEP82Qs";
-
 const MapScreen: React.FC = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -61,7 +51,6 @@ const MapScreen: React.FC = () => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [badmintonCourts, setBadmintonCourts] = useState<BadmintonCourt[]>([]);
 
@@ -75,7 +64,6 @@ const MapScreen: React.FC = () => {
   const loadMap = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      setErrorMsg("Quyền truy cập vị trí bị từ chối");
       return;
     }
 
@@ -87,12 +75,18 @@ const MapScreen: React.FC = () => {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       };
+      const region = newRegion ?? {
+        latitude: 10.7763,
+        longitude: 106.6342,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      };
 
-      setStorageItem("location", newRegion);
-      setRegion(newRegion);
-      searchBadmintonCourts(newRegion);
+      setStorageItem("location", region);
+      setRegion(region);
+      searchBadmintonCourts(region);
     } catch (error) {
-      setErrorMsg("Không thể lấy vị trí hiện tại");
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -146,7 +140,7 @@ const MapScreen: React.FC = () => {
             response.data.routes[0].overview_polyline.points
           );
           setDirectionsCoordinates(points);
-          setIsModalVisible(false); // Close the modal to show the directions
+          setIsModalVisible(false);
         } else {
           Alert.alert("Thông báo", "Không thể tìm thấy đường đi");
         }
@@ -155,37 +149,6 @@ const MapScreen: React.FC = () => {
         Alert.alert("Lỗi", "Không thể lấy chỉ đường");
       }
     }
-  };
-
-  const decodePolyline = (encoded: string) => {
-    let index = 0,
-      len = encoded.length;
-    let lat = 0,
-      lng = 0;
-    let path = [];
-    while (index < len) {
-      let b,
-        shift = 0,
-        result = 0;
-      do {
-        b = encoded.charAt(index++).charCodeAt(0) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lat += dlat;
-      shift = 0;
-      result = 0;
-      do {
-        b = encoded.charAt(index++).charCodeAt(0) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lng += dlng;
-      path.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
-    }
-    return path;
   };
 
   const searchBadmintonCourts = async (searchRegion: typeof region) => {
@@ -461,43 +424,37 @@ const MapScreen: React.FC = () => {
         )}
       </View>
 
-      {errorMsg ? (
-        <View style={styles.centeredContainer}>
-          <Text style={styles.errorText}>{errorMsg}</Text>
-        </View>
-      ) : (
-        <MapView provider={PROVIDER_GOOGLE} style={styles.map} region={region}>
-          <Marker coordinate={region} />
-          {badmintonCourts.map((court) => (
-            <Marker
-              key={court.id}
-              coordinate={{
-                latitude: court.latitude,
-                longitude: court.longitude,
-              }}
-              onPress={() => handleMarkerPress(court)}
-            >
-              <Image
-                source={require("../../assets/images/racket_marker_icon.png")}
-                style={{ width: 36, height: 36 }}
-                resizeMode="contain"
-              />
-              <Callout tooltip>
-                <View>
-                  <Text>{court.name}</Text>
-                </View>
-              </Callout>
-            </Marker>
-          ))}
-          {directionsCoordinates.length > 0 && (
-            <Polyline
-              coordinates={directionsCoordinates}
-              strokeColor="red"
-              strokeWidth={3}
+      <MapView provider={PROVIDER_GOOGLE} style={styles.map} region={region}>
+        <Marker coordinate={region} />
+        {badmintonCourts.map((court) => (
+          <Marker
+            key={court.id}
+            coordinate={{
+              latitude: court.latitude,
+              longitude: court.longitude,
+            }}
+            onPress={() => handleMarkerPress(court)}
+          >
+            <Image
+              source={require("../../assets/images/racket_marker_icon.png")}
+              style={{ width: 36, height: 36 }}
+              resizeMode="contain"
             />
-          )}
-        </MapView>
-      )}
+            <Callout tooltip>
+              <View>
+                <Text>{court.name}</Text>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+        {directionsCoordinates.length > 0 && (
+          <Polyline
+            coordinates={directionsCoordinates}
+            strokeColor="red"
+            strokeWidth={3}
+          />
+        )}
+      </MapView>
       <CourtDetailsModal />
     </SafeAreaView>
   );
